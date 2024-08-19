@@ -1,0 +1,66 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.login-container {
+  width: 50%;
+  height: auto; /* Adjust to fit content */
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form .form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+  justify-content: center;
+}
+
+.login-form label {
+  margin-right: 14px;
+  font-weight: 600;
+  margin-left: 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.login-form input {
+  width: 400px; /* Adjust width as needed */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f4f4f4;
+  border-radius: 10px 10px 0 0;
+}
+.a {
+  position: relative;
+  left: -16px;
+}
+.login-form button {
+  width: 30%;
+  margin: 25px auto 0;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: #a9bcff;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  color: #474444;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-form button:disabled {
+  background-color: #b0b0b0; /* Light gray for disabled state */
+  cursor: not-allowed;
+}
