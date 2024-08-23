@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getQuiz } from "../../../api/quiz";
+import "./TrendingQuizes.css";
 
 function TrendingQuizzes() {
   const [quizzes, setQuizzes] = useState([]);
@@ -42,21 +43,39 @@ function TrendingQuizzes() {
     return `${date.getDate()} ${month.substring(0, 3)},${date.getFullYear()}`;
   };
   return (
-    <div className="quiz-container">
-      <h1>Trending Quizzes</h1>
-      {loading && <div>Loading...</div>}
-      {error && <div>Error: {error.message}</div>}
-      {!loading && (
-        <div className="quizzes">
-          {quizzes.map((quiz) => (
-            <div key={quiz._id} className="quiz">
-              <h2>{quiz.title}</h2>
-              <p>Created on: {formatDate(quiz.date)}</p>
-            </div>
-          ))}
+    <>
+      <div className="dashboard-top">
+        <div className="top-content qu">
+          {quizzes.length}
+          <span>Quiz</span>
+          <h6>Created</h6>
         </div>
-      )}
-    </div>
+        <div className="top-content cr">
+          50 <span>questions</span>
+          <h6>Created</h6>
+        </div>
+        <div className="top-content im">
+          86 <span>Total</span>
+          <h6>Impressions</h6>
+        </div>
+      </div>
+      <div className="quiz-container">
+        <h1 className="trending-quiz-title">Trending Quizzes</h1>
+        {loading && <div>Loading...</div>}
+        {error && <div>Error: {error.message}</div>}
+        {!loading && (
+          <div className="quizzes">
+            {quizzes.map((quiz) => (
+              <div key={quiz._id} className="quiz">
+                <h2>{quiz.title}</h2>
+                <img src="./images/eyes.png" alt="impressions" />
+                <p>Created on: {formatDate(quiz.date)}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 }
 

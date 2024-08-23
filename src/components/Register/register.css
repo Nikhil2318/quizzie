@@ -52,6 +52,9 @@
   padding: 10px;
   border: none;
   border-radius: 6px;
+  position: relative;
+  left: 0;
+  bottom: 0;
   background-color: #a9bcff;
   font-weight: 600;
   font-family: "Poppins", sans-serif;

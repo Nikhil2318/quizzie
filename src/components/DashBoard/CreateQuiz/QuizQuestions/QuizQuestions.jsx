@@ -9,7 +9,10 @@ function QuizQuestions() {
     {
       id: 1,
       question: "",
-      options: [{ text: "", imageURL: "" }],
+      options: [
+        { text: "", imageURL: "" }, // Default option 1
+        { text: "", imageURL: "" }, // Default option 2
+      ],
       answer: "",
       timer: "off",
       optionType: "text",
@@ -21,6 +24,11 @@ function QuizQuestions() {
   const handleOptionTypeChange = (index, value) => {
     const updatedQuestions = [...questions];
     updatedQuestions[index].optionType = value;
+    // Reset options if the type changes to ensure compatibility
+    updatedQuestions[index].options = [
+      { text: "", imageURL: "" }, // Default option 1
+      { text: "", imageURL: "" }, // Default option 2
+    ];
     setQuestions(updatedQuestions);
   };
 
@@ -48,7 +56,10 @@ function QuizQuestions() {
       {
         id: questions.length + 1,
         question: "",
-        options: [{ text: "", imageURL: "" }],
+        options: [
+          { text: "", imageURL: "" }, // Default option 1
+          { text: "", imageURL: "" }, // Default option 2
+        ],
         answer: "",
         timer: "off",
         optionType: "text",
@@ -91,7 +102,7 @@ function QuizQuestions() {
           throw new Error(`Failed to add question: ${question.question}`);
         }
       }
-      
+
       toast.success("Questions added successfully");
       navigate(`/quiz/${quizId}/questions/view`);
     } catch (error) {
@@ -234,17 +245,27 @@ function QuizQuestions() {
                           )
                         }
                       />
-                      <button
-                        type="button"
-                        onClick={() => deleteOption(questionIndex, optionIndex)}
-                      >
-                        Delete
-                      </button>
+                      {optionIndex >= 2 && (
+                        <button
+                          type="button"
+                          className="deleteBtn"
+                          onClick={() =>
+                            deleteOption(questionIndex, optionIndex)
+                          }
+                        >
+                          <img
+                            src="/images/delete.png"
+                            alt="deleteImg"
+                            className="deleteImg"
+                          />
+                        </button>
+                      )}
                     </div>
                   )}
                   {question.optionType === "imageURL" && (
                     <div>
                       <input
+                        className="option-radio url"
                         type="radio"
                         name={`answer-${questionIndex}`}
                         value={option.imageURL}
@@ -257,6 +278,7 @@ function QuizQuestions() {
                         }}
                       />
                       <input
+                        className="option-input txt"
                         type="text"
                         placeholder={`Image URL ${optionIndex + 1}`}
                         value={option.imageURL}
@@ -269,17 +291,27 @@ function QuizQuestions() {
                           )
                         }
                       />
-                      <button
-                        type="button"
-                        onClick={() => deleteOption(questionIndex, optionIndex)}
-                      >
-                        Delete
-                      </button>
+                      {optionIndex >= 2 && (
+                        <button
+                          type="button"
+                          className="deleteBtn"
+                          onClick={() =>
+                            deleteOption(questionIndex, optionIndex)
+                          }
+                        >
+                          <img
+                            src="/images/delete.png"
+                            alt="deleteImg"
+                            className="deleteImg"
+                          />
+                        </button>
+                      )}
                     </div>
                   )}
                   {question.optionType === "text&imageURL" && (
                     <div>
                       <input
+                        className="option-radio rdo"
                         type="radio"
                         name={`answer-${questionIndex}`}
                         value={`${option.text} ${option.imageURL}`}
@@ -295,6 +327,7 @@ function QuizQuestions() {
                         }}
                       />
                       <input
+                        className="option-input txt1"
                         type="text"
                         placeholder={`Option ${optionIndex + 1} Text`}
                         value={option.text}
@@ -308,6 +341,7 @@ function QuizQuestions() {
                         }
                       />
                       <input
+                        className="option-input txt2"
                         type="text"
                         placeholder={`Option ${optionIndex + 1} Image URL`}
                         value={option.imageURL}
@@ -320,58 +354,76 @@ function QuizQuestions() {
                           )
                         }
                       />
-                      <button
-                        type="button"
-                        onClick={() => deleteOption(questionIndex, optionIndex)}
-                      >
-                        Delete
-                      </button>
+                      {optionIndex >= 2 && (
+                        <button
+                          type="button"
+                          className="deleteBtn"
+                          onClick={() =>
+                            deleteOption(questionIndex, optionIndex)
+                          }
+                        >
+                          <img
+                            src="/images/delete.png"
+                            alt="deleteImg"
+                            className="deleteImg"
+                          />
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
               ))}
-              <button type="button" onClick={() => addOption(questionIndex)}>
-                Add Option
-              </button>
+              {question.options.length < 4 && (
+                <button
+                  type="button"
+                  className="add-option"
+                  onClick={() => addOption(questionIndex)}
+                >
+                  Add Option
+                </button>
+              )}
+              <br />
+              <div className="timer-container">
+                <label className="timer-label">Timer:</label>
+                <button
+                  type="button"
+                  className={question.timer === "off" ? "active" : ""}
+                  onClick={() => {
+                    const updatedQuestions = [...questions];
+                    updatedQuestions[questionIndex].timer = "off";
+                    setQuestions(updatedQuestions);
+                  }}
+                >
+                  Off
+                </button>
+                <button
+                  type="button"
+                  className={question.timer === "5sec" ? "active" : ""}
+                  onClick={() => {
+                    const updatedQuestions = [...questions];
+                    updatedQuestions[questionIndex].timer = "5sec";
+                    setQuestions(updatedQuestions);
+                  }}
+                >
+                  5 sec
+                </button>
+                <button
+                  type="button"
+                  className={question.timer === "10sec" ? "active" : ""}
+                  onClick={() => {
+                    const updatedQuestions = [...questions];
+                    updatedQuestions[questionIndex].timer = "10sec";
+                    setQuestions(updatedQuestions);
+                  }}
+                >
+                  10 sec
+                </button>
+              </div>
               <br />
 
-              <label>Timer:</label>
-              <button
-                type="button"
-                className={question.timer === "off" ? "active" : ""}
-                onClick={() => {
-                  const updatedQuestions = [...questions];
-                  updatedQuestions[questionIndex].timer = "off";
-                  setQuestions(updatedQuestions);
-                }}
-              >
-                Off
+              <button className="submit-btn" type="submit">
+                Create Quiz
               </button>
-              <button
-                type="button"
-                className={question.timer === "5sec" ? "active" : ""}
-                onClick={() => {
-                  const updatedQuestions = [...questions];
-                  updatedQuestions[questionIndex].timer = "5sec";
-                  setQuestions(updatedQuestions);
-                }}
-              >
-                5 sec
-              </button>
-              <button
-                type="button"
-                className={question.timer === "10sec" ? "active" : ""}
-                onClick={() => {
-                  const updatedQuestions = [...questions];
-                  updatedQuestions[questionIndex].timer = "10sec";
-                  setQuestions(updatedQuestions);
-                }}
-              >
-                10 sec
-              </button>
-              <br />
-
-              <button type="submit">Submit</button>
             </div>
           ) : null
         )}

@@ -75,7 +75,6 @@ hr {
 .main-container {
   display: flex;
   flex-direction: row;
-  height: 100vh;
   width: 100vw;
   background-color: #ededed;
 }
@@ -88,6 +87,8 @@ hr {
   padding: 20px;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  left: 0;
 }
 
 .side-bar h1 {
@@ -137,8 +138,10 @@ hr {
 }
 
 .content-container {
+  margin-left: 15vw; /* Start the content after the sidebar */
   width: calc(100vw - 15vw); /* Takes the remaining width */
   height: 100vh;
   padding: 20px;
-  background-color: #ededed;
+  background-color: #ededed; /* Background color for the content */
+  overflow-y: auto; /* Add scroll if content overflows */
 }

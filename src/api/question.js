@@ -38,8 +38,10 @@ export const createQuestions = ({
 
 export const getQuestions = (quizId) => {
   try {
-    const response = axios.get(`${BACKEND_URL}/api/quiz/${quizId}questions`);
-    return response.data;
+    const response = axios.get(
+      `${BACKEND_URL}/api/quiz/questions/${quizId}/questions`
+    );
+    return response;
   } catch (e) {
     console.error("Error details:", e.response ? e.response.data : e.message);
     throw new Error(e.response ? e.response.data.message : e.message);
