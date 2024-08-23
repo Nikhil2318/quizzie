@@ -1,6 +1,7 @@
 # Logs
 node_modules
 .env
+dist
 logs
 *.log
 npm-debug.log*
@@ -24,3 +25,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.vercel

@@ -43,3 +43,22 @@ export const login = ({ email, password }) => {
     throw new Error(e.response ? e.response.data.message : e.message);
   }
 };
+
+export const verifyToken = async () => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${BACKEND_URL}/auth/verify`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response;
+  } catch (error) {
+    return new Error(error.response.data.message);
+  }
+};

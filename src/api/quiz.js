@@ -7,7 +7,7 @@ export const createQuiz = async ({ title, type }) => {
     title,
     type,
   });
-  console.log("data sent:" + data);
+  // console.log("data sent:" + data);
 
   try {
     const response = await axios.post(`${BACKEND_URL}/api/quiz`, data, {
@@ -33,3 +33,12 @@ export const getQuiz = async () => {
     throw new Error(e.response ? e.response.data.message : e.message);
   }
 };
+
+// export const getQuizByid = async() => {
+//     try {
+//       const response = await axios.get(`${BACKEND_URL}/api/quiz`);
+//       return response.data;
+//     } catch (error) {
+
+//     }
+// }

@@ -1,12 +1,14 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Analytics from "./Analytics/Analytics";
 import CreateQuiz from "./CreateQuiz/CreateQuiz";
 import Quiz from "./CreateQuiz/Quiz/Quiz"; // Update the import path as needed
 import toast from "react-hot-toast";
-import "./Dashboard.css";
+import "./DashBoard.css";
 import { getQuiz } from "../../api/quiz";
 import TrendingQuizes from "./TrendingQuizes/TrendingQuizes";
+import { verifyToken } from "../../api/auth";
 
 function DashBoard() {
   const navigate = useNavigate();
@@ -41,6 +43,21 @@ function DashBoard() {
         setLoading(false);
       }
     };
+    const fetchUser = async () => {
+      try {
+        const response = await verifyToken();
+        // console.log("dashBoard", response);
+
+        if (response.status === 200) {
+          toast.success("User verified successfully");
+        } else {
+          toast.error("User verification failed");
+        }
+      } catch (error) {
+        toast.error("Error verifying user");
+      }
+    };
+    fetchUser();
     getQuizzes();
   }, []);
 
