@@ -9,6 +9,7 @@ import "./DashBoard.css";
 import { getQuiz } from "../../api/quiz";
 import TrendingQuizes from "./TrendingQuizes/TrendingQuizes";
 import { verifyToken } from "../../api/auth";
+import QuizWiseAnalysis from "./Analytics/QuizWiseAnalysis/QuizWiseAnalysis";
 
 function DashBoard() {
   const navigate = useNavigate();
@@ -81,6 +82,7 @@ function DashBoard() {
         <Routes>
           <Route path="/" element={<TrendingQuizes />} />
           <Route path="analytics" element={<Analytics />} />
+          <Route path="analytics/:id" element={<QuizWiseAnalysis />} />
         </Routes>
       </div>
       <Quiz isOpen={isModalOpen} onClose={closeModal}>

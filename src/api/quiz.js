@@ -13,6 +13,7 @@ export const createQuiz = async ({ title, type }) => {
     const response = await axios.post(`${BACKEND_URL}/api/quiz`, data, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
     return response;
@@ -31,6 +32,36 @@ export const getQuiz = async () => {
   } catch (e) {
     console.error("Error details:", e.response ? e.response.data : e.message);
     throw new Error(e.response ? e.response.data.message : e.message);
+  }
+};
+
+export const getQuizByid = async (id) => {
+  try {
+    const response = await axios.get(`${BACKEND_URL}/api/quiz/${id}`, {});
+    return response.data;
+  } catch (e) {
+    console.error("Error details:", e.response ? e.response.data : e.message);
+    throw new Error(e.response ? e.response.data.message : e.message);
+  }
+};
+
+export const deleteQuiz = async (quizId) => {
+  try {
+    const response = await axios.delete(`${BACKEND_URL}/api/quiz/delete`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      params: { id: quizId },
+    });
+
+    // Return the full response object
+    return response;
+  } catch (e) {
+    // Return the response in case of an error
+    if (e.response && e.response.status) {
+      return e.response;
+    }
+    throw new Error(e.message); // Throw other types of errors
   }
 };
 

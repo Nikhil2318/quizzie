@@ -21,10 +21,9 @@ table {
   margin: 20px auto;
   font-size: 1em;
   min-width: 600px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px; /* Add border-radius to the table */
   overflow: hidden; /* Clip the content inside the rounded corners */
-  border: none; /* Ensure no borders around the table */
+  border: none;
 }
 
 thead tr {
@@ -37,7 +36,7 @@ thead tr {
 thead th,
 tbody td {
   padding: 12px 15px;
-  border: none; /* Ensure no borders on table cells */
+  border: none;
 }
 
 thead th:first-child,
@@ -104,4 +103,5 @@ tbody tr:last-of-type {
 
 .analysis-link:hover {
   text-decoration: underline;
+  cursor: pointer;
 }

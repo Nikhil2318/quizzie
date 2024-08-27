@@ -18,7 +18,7 @@ function Login() {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmitL = async (e) => {
     e.preventDefault();
     if (!email || !password) {
       toast.error("Please fill all the fields");
@@ -44,7 +44,7 @@ function Login() {
 
   return (
     <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit}>
+      <form className="login-form" onSubmit={handleSubmitL}>
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input

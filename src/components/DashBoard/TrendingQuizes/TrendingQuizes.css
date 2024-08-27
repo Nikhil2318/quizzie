@@ -67,5 +67,11 @@
 .quiz img {
   position: absolute;
   right: 20px;
-  top: 20px;
+  top: 15px;
+}
+
+.impressions {
+  position: absolute;
+  right: 45px;
+  top: 12px;
 }

@@ -1,19 +1,31 @@
 import { useEffect, useState } from "react";
 import { getQuiz } from "../../../api/quiz";
 import "./TrendingQuizes.css";
+import axios from "axios";
+import { BACKEND_URL } from "../../../utils/constant";
+import { useParams } from "react-router-dom"; // To access URL params
 
 function TrendingQuizzes() {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [questionsCount, setQuestionsCount] = useState([]);
+  const [totalImpressions, setTotalImpressions] = useState(0);
+  const { quizId } = useParams(); // Get the quizId from the URL
 
   useEffect(() => {
     const getQuizzes = async () => {
       try {
         const data = await getQuiz();
         console.log(data);
-
         setQuizzes(data);
+
+        // Calculate total impressions
+        const total = data.reduce(
+          (sum, quiz) => sum + (quiz.impressions || 0),
+          0
+        );
+        setTotalImpressions(total);
       } catch (e) {
         setError(e);
       } finally {
@@ -22,6 +34,39 @@ function TrendingQuizzes() {
     };
     getQuizzes();
   }, []);
+
+  useEffect(() => {
+    if (!quizId) return; // Exit if no quizId is provided
+
+    const incrementImpressions = async (quizId) => {
+      try {
+        console.log("Incrementing impressions for quiz:", quizId);
+        await axios.post(
+          `${BACKEND_URL}/api/quiz/increment-impressions/${quizId}`
+        );
+        console.log("Impressions incremented for quiz:", quizId);
+      } catch (error) {
+        console.error("Error incrementing impressions:", error);
+      }
+    };
+
+    incrementImpressions(quizId);
+  }, [quizId]); // Depend on quizId, so it only increments for the current quiz
+
+  useEffect(() => {
+    const getQuestionsCount = async () => {
+      try {
+        const response = await axios.get(
+          `${BACKEND_URL}/api/quiz/questions/count`
+        );
+        setQuestionsCount(response.data.count);
+      } catch (error) {
+        console.error("Error fetching question count:", error);
+      }
+    };
+    getQuestionsCount();
+  }, []);
+
   const formatDate = (dateString) => {
     const months = [
       "January",
@@ -39,9 +84,10 @@ function TrendingQuizzes() {
     ];
 
     const date = new Date(dateString);
-    const month = months[date.getMonth() + 1];
-    return `${date.getDate()} ${month.substring(0, 3)},${date.getFullYear()}`;
+    const month = months[date.getMonth()];
+    return `${date.getDate()} ${month.substring(0, 3)}, ${date.getFullYear()}`;
   };
+
   return (
     <>
       <div className="dashboard-top">
@@ -51,11 +97,11 @@ function TrendingQuizzes() {
           <h6>Created</h6>
         </div>
         <div className="top-content cr">
-          50 <span>questions</span>
+          {questionsCount} <span>questions</span>
           <h6>Created</h6>
         </div>
         <div className="top-content im">
-          86 <span>Total</span>
+          {totalImpressions} <span>Total</span>
           <h6>Impressions</h6>
         </div>
       </div>
@@ -68,6 +114,7 @@ function TrendingQuizzes() {
             {quizzes.map((quiz) => (
               <div key={quiz._id} className="quiz">
                 <h2>{quiz.title}</h2>
+                <span className="impressions">{quiz.impressions}</span>
                 <img src="./images/eyes.png" alt="impressions" />
                 <p>Created on: {formatDate(quiz.date)}</p>
               </div>
