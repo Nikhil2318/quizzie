@@ -80,18 +80,21 @@ const Analytics = () => {
     }
   };
 
-  const handleShare = (text) => {
-    navigator.clipboard.writeText(text).then(
+  const handleShare = (quizId) => {
+    const baseUrl = window.location.origin;
+    const shareUrl = `${baseUrl}/quiz/${quizId}/questions/view`;
+
+    navigator.clipboard.writeText(shareUrl).then(
       () => {
         toast.success("Text copied to clipboard");
-        // Optionally show a toast or some feedback to the user
       },
       (err) => {
         console.error("Failed to copy text: ", err);
-        // Optionally show an error message to the user
+        toast.error("Failed to copy text");
       }
     );
   };
+
   const navigate = useNavigate();
   const handleAnalysis = (selectedQuizId) => {
     // Navigate to the analysis page with the selected quiz ID
@@ -134,11 +137,7 @@ const Analytics = () => {
                   ></span>
                   <span
                     className="icon share"
-                    onClick={() =>
-                      handleShare(
-                        `http://localhost:5173/quiz/${quiz._id}/questions/view`
-                      )
-                    }
+                    onClick={() => handleShare(quiz._id)}
                     title="Share"
                   ></span>
                   <a
