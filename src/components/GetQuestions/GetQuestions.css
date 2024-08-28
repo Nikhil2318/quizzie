@@ -19,20 +19,22 @@ styles.css .quiz-container {
   text-align: center;
   color: #444;
 }
-
 .options {
   list-style: none;
   padding: 10px;
-  gap: 50px;
+  gap: 20px; /* Reduced gap for mobile view */
   display: grid;
   border: 1px solid;
   place-items: center;
-  grid-template-columns: auto auto;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(120px, 1fr)
+  ); /* Adjust based on your design */
 }
 
 .option-button {
-  display: block;
-  width: 10rem;
+  width: 100%; /* Make the option button take full width in its grid column */
+  max-width: 200px; /* Set a max width for larger screens */
   text-align: center;
   padding: 10px;
   margin-bottom: 10px;
@@ -42,6 +44,11 @@ styles.css .quiz-container {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s, border-color 0.3s;
+}
+
+.option-image {
+  max-width: 100%; /* Ensure image takes full width of the option button */
+  height: auto;
 }
 
 .option-button:hover {
@@ -94,4 +101,67 @@ styles.css .quiz-container {
   color: #474444;
   margin-left: 50px;
   font-weight: 700;
+}
+.congratulations-container {
+  margin: 40px auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center; /* Center text for mobile view */
+}
+
+.congratulations-container img {
+  max-width: 80%; /* Make the image responsive */
+  height: auto;
+  margin-bottom: 20px; /* Add some space below the image */
+}
+
+.score {
+  font-size: 24px;
+  font-weight: 800;
+  color: #28a745;
+}
+
+.score-title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .quiz-container {
+    padding: 10px;
+  }
+
+  .quiz-title {
+    font-size: 20px;
+  }
+
+  .question {
+    font-size: 24px;
+  }
+
+  .options {
+    gap: 10px;
+    grid-template-columns: 1fr; /* Stack options vertically */
+  }
+
+  .next-button {
+    width: 100%; /* Make the next button full width */
+    font-size: 14px; /* Slightly smaller font size */
+  }
+
+  .congratulations-container img {
+    max-width: 100%; /* Make the image take full width */
+  }
+
+  .score-title {
+    font-size: 20px;
+  }
+
+  .score {
+    font-size: 20px;
+  }
 }

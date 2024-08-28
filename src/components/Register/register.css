@@ -63,3 +63,16 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
+.error {
+  border: 2px solid red;
+  /* color: red; */
+}
+
+.error::placeholder {
+  color: red;
+}
+
+.form-group input.error {
+  background-color: #ffe6e6;
+}

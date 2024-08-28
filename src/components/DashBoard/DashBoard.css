@@ -124,9 +124,11 @@ hr {
   box-shadow: 0px 0px 14px 0px #0000001f;
 }
 
-hr {
-  margin-top: 60px;
-  border: 1px solid #000000;
+.hr {
+  margin-top: 50px;
+  border: none;
+  border-top: 1px solid #000000;
+  width: 100%;
 }
 
 .log-out {

@@ -12,10 +12,9 @@ function GetQuestions() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(null);
-  const [quizCompleted, setQuizCompleted] = useState(false); // New flag to track quiz completion
+  const [quizCompleted, setQuizCompleted] = useState(false);
 
   useEffect(() => {
-    // Increment impressions when the component mounts
     const incrementImpressions = async () => {
       try {
         await axios.post(`/api/increment-impressions/${quizId}`);
@@ -25,7 +24,7 @@ function GetQuestions() {
     };
 
     incrementImpressions();
-    // Fetching questions logic
+
     const renderQuestions = async () => {
       try {
         const response = await getQuestions(quizId);
@@ -70,7 +69,7 @@ function GetQuestions() {
   };
 
   const handleNextQuestion = (isTimerEnd = false) => {
-    if (quizCompleted) return; // Prevent further action if quiz is already completed
+    if (quizCompleted) return;
 
     const currentQuestion = questions[currentQuestionIndex];
 
@@ -93,9 +92,8 @@ function GetQuestions() {
       setSelectedOption(null);
       setTimeLeft(parseInt(questions[currentQuestionIndex + 1].timer, 10) || 0);
     } else {
-      // Final evaluation and prevent further actions
       const finalScore = isCorrect ? score + 1 : score;
-      setQuizCompleted(true); // Set quiz completion flag
+      setQuizCompleted(true);
       toast(
         `Quiz completed! Your score: ${finalScore} out of ${questions.length}`
       );
@@ -107,52 +105,68 @@ function GetQuestions() {
 
   return (
     <div className="quiz-container">
-      <h1 className="quiz-title">Quiz Questions</h1>
-      <span className="question-index">
-        {currentQuestionIndex}/{questions.length - 1}
-      </span>
-
-      {currentQuestion ? (
-        <div>
-          <h4 className="timer">Timer: {timeLeft}</h4>
-          <h2 className="question">{currentQuestion.question}</h2>
-          <ul className="options">
-            {currentQuestion.options.map((option, index) => (
-              <li key={index} className="option-item">
-                <button
-                  onClick={() => handleOptionClick(option)}
-                  className={`option-button ${
-                    selectedOption === option ? "selected" : ""
-                  }`}
-                >
-                  {option.imageURL ? (
-                    <div className="option-content">
-                      <img
-                        src={option.imageURL}
-                        alt="Option"
-                        className="option-image"
-                      />
-                      {option.text && (
+      {!quizCompleted ? (
+        <>
+          <h1 className="quiz-title">Quiz Questions</h1>
+          <span className="question-index">
+            {currentQuestionIndex}/{questions.length - 1}
+          </span>
+          {currentQuestion ? (
+            <div>
+              <h4 className="timer">Timer: {timeLeft}</h4>
+              <h2 className="question">{currentQuestion.question}</h2>
+              <ul className="options">
+                {currentQuestion.options.map((option, index) => (
+                  <li key={index} className="option-item">
+                    <button
+                      onClick={() => handleOptionClick(option)}
+                      className={`option-button ${
+                        selectedOption === option ? "selected" : ""
+                      }`}
+                    >
+                      {option.imageURL ? (
+                        <div className="option-content">
+                          <img
+                            src={option.imageURL}
+                            alt="Option"
+                            className="option-image"
+                          />
+                          {option.text && (
+                            <span className="option-text">{option.text}</span>
+                          )}
+                        </div>
+                      ) : (
                         <span className="option-text">{option.text}</span>
                       )}
-                    </div>
-                  ) : (
-                    <span className="option-text">{option.text}</span>
-                  )}
-                </button>
-              </li>
-            ))}
-          </ul>
-          <button
-            onClick={() => handleNextQuestion(false)}
-            className="next-button"
-            disabled={!selectedOption}
-          >
-            {currentQuestionIndex == questions.length - 1 ? "Submit" : "Next"}
-          </button>
-        </div>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={() => handleNextQuestion(false)}
+                className="next-button"
+                disabled={!selectedOption}
+              >
+                {currentQuestionIndex === questions.length - 1
+                  ? "Submit"
+                  : "Next"}
+              </button>
+            </div>
+          ) : (
+            <p>Loading...</p>
+          )}
+        </>
       ) : (
-        <p>Loading...</p>
+        <div className="congratulations-container">
+          <h2>Congrats Quiz is completed!</h2>
+          <img src="/images/tropy.png" alt="tropy" />
+          <p className="score-title">
+            Your Score is{" "}
+            <span className="score">
+              0{score}/0{questions.length}
+            </span>
+          </p>
+        </div>
       )}
     </div>
   );

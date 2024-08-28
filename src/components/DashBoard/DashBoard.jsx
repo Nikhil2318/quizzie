@@ -73,7 +73,7 @@ function DashBoard() {
           </button>
           <button onClick={openModal}>Create Quiz</button>
         </div>
-        <hr />
+        <hr className="hr" />
         <button className="log-out" onClick={handleLogOut}>
           LOGOUT
         </button>
