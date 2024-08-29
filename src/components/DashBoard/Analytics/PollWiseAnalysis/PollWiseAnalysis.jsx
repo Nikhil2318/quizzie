@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getQuizByid } from "../../../../api/quiz";
-import { getQuestions } from "../../../../api/question";
-import "./QuizWiseAnalysis.css";
+import { getPollQuestions } from "../../../../api/pollQuestion";
 
-function QuizWiseAnalysis() {
-  const { id } = useParams(); // Get the quiz ID from the URL
+function PollWiseAnalysis() {
+  const { id } = useParams();
   const [quiz, setQuiz] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchQuiz = async () => {
+    const fetchPoll = async () => {
       try {
         const data = await getQuizByid(id);
-        console.log("quiz", data); // Log quiz data for debugging
         setQuiz(data);
         setLoading(false);
       } catch (error) {
@@ -24,17 +22,18 @@ function QuizWiseAnalysis() {
       }
     };
     if (id) {
-      fetchQuiz();
+      fetchPoll();
     }
   }, [id]);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await getQuestions(id);
-        console.log("questions", response.data); // Log questions data for debugging
+        const response = await getPollQuestions(id);
+        console.log("questions", response.data);
         setQuestions(response.data);
       } catch (error) {
+        console.error("Error fetching questions:", error);
         setError(error);
       } finally {
         setLoading(false);
@@ -65,31 +64,22 @@ function QuizWiseAnalysis() {
               <p className="quiz-question">
                 Q.{index + 1} {question.question}
               </p>
-              <div className="question-analysis">
-                <div className="analysis-container">
-                  {question.correctCount + question.incorrectCount}
-                  <span>Total</span>
+              {question.options.map((option) => (
+                <div key={option._id} className="option-item">
+                  <p>{option.text}</p>
+                  <p>Votes: {option.votes}</p>
                 </div>
-                <div className="analysis-container">
-                  {question.correctCount}
-                  <span>Correct</span>
-                </div>
-                <div className="analysis-container">
-                  {" "}
-                  {question.incorrectCount}
-                  <span>Incorrect</span>
-                </div>
-              </div>
+              ))}
               <div className="horizontal-line"></div>
             </div>
           ))}
         </div>
       )}
       {!loading && !error && questions.length === 0 && (
-        <div>No questions found for this quiz q&a.</div>
+        <div>No questions found for this quiz. poll type</div>
       )}
     </div>
   );
 }
 
-export default QuizWiseAnalysis;
+export default PollWiseAnalysis;

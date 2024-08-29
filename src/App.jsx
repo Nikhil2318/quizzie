@@ -7,6 +7,9 @@ import Home from "./components/Home/Home";
 import DashBoard from "./components/DashBoard/DashBoard";
 import GetQuestions from "./components/GetQuestions/GetQuestions";
 import QuizWiseAnalysis from "./components/DashBoard/Analytics/QuizWiseAnalysis/QuizWiseAnalysis";
+import GetPollQuestions from "./components/GetPollQuestions/GetPollQuestions";
+import PollWiseAnalysis from "./components/DashBoard/Analytics/PollWiseAnalysis/PollWiseAnalysis";
+import QuizAnalysis from "./components/DashBoard/Analytics/QuizAnalysis";
 
 function App() {
   return (
@@ -28,8 +31,20 @@ function App() {
         <Route path="/dashboard/*" element={<DashBoard />} />
         <Route path="/quiz/:quizId/questions/view" element={<GetQuestions />} />
         <Route
+          path="/quiz/:quizId/questions/poll"
+          element={<GetPollQuestions />}
+        />
+        {/* <Route
           path="/dashboard/analysis/:selectedQuizId"
           element={<QuizWiseAnalysis />}
+        />
+        <Route
+          path="/dashboard/analysis/:selectedQuizId"
+          element={<PollWiseAnalysis />}
+        /> */}
+        <Route
+          path="/dashboard/analysis/:selectedQuizId"
+          element={<QuizAnalysis />}
         />
         {/* <Route path="/dashboard/analytics" element={<Analytics />} />
         <Route path="/dashboard/createQuiz" element={<CreateQuiz />} /> */}

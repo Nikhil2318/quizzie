@@ -37,7 +37,7 @@ export const getQuiz = async () => {
 
 export const getQuizByid = async (id) => {
   try {
-    const response = await axios.get(`${BACKEND_URL}/api/quiz/${id}`, {});
+    const response = await axios.get(`${BACKEND_URL}/api/quiz/${id}`);
     return response.data;
   } catch (e) {
     console.error("Error details:", e.response ? e.response.data : e.message);

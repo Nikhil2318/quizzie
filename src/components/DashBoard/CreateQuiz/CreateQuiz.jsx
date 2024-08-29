@@ -21,6 +21,7 @@ function CreateQuiz() {
   const handleType = (newType) => {
     setType(newType);
   };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -28,6 +29,7 @@ function CreateQuiz() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
 
@@ -35,6 +37,7 @@ function CreateQuiz() {
       toast.error("Please enter a quiz name");
       return;
     }
+
     try {
       const response = await createQuiz({ title: quizName, type });
       console.log("API response: ", response.data._id);
@@ -48,6 +51,7 @@ function CreateQuiz() {
       console.error(error);
       toast.error("Error creating quiz");
     }
+
     // Clear the form inputs
     setQuizName("");
   };
@@ -65,7 +69,7 @@ function CreateQuiz() {
           />
         </div>
         <div className="quiz-type">
-          <label> Quiz type</label>
+          <label>Quiz type</label>
           <button
             type="button"
             className={`qna-btn ${type === "q&a" ? "active" : ""}`}
@@ -81,12 +85,17 @@ function CreateQuiz() {
             Poll Type
           </button>
         </div>
-        <button type="submit" className="quiz-continue" onClick={openModal}>
+        <button
+          type="submit"
+          className="quiz-continue"
+          onClick={openModal}
+          disabled={!quizName} // Disable the button if quizName is empty
+        >
           Continue
         </button>
       </form>
       <QuizModal isOpen={isModalOpen} onClose={closeModal}>
-        {type == "q&a" ? <QuizQuestion /> : <PollQuestions />}
+        {type === "q&a" ? <QuizQuestion /> : <PollQuestions />}
       </QuizModal>
     </>
   );

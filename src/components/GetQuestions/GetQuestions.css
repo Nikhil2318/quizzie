@@ -20,16 +20,20 @@ styles.css .quiz-container {
   color: #444;
 }
 .options {
+  margin-top: 20px;
   list-style: none;
   padding: 10px;
-  gap: 20px; /* Reduced gap for mobile view */
+  gap: 20px;
   display: grid;
-  border: 1px solid;
   place-items: center;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(120px, 1fr)
-  ); /* Adjust based on your design */
+  grid-template-columns: repeat(2, 1fr); /* Default 2x2 grid layout */
+}
+
+@media (max-width: 768px) {
+  .options {
+    gap: 10px;
+    grid-template-columns: 1fr; /* Stack options vertically on small screens */
+  }
 }
 
 .option-button {
@@ -96,7 +100,7 @@ styles.css .quiz-container {
   height: auto;
 }
 
-.question-index {
+.questions-index {
   font-size: 24px;
   color: #474444;
   margin-left: 50px;

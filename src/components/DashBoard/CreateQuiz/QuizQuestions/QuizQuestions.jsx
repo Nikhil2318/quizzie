@@ -115,10 +115,7 @@ function QuizQuestions() {
     <>
       <div style={{ display: "flex" }}>
         {questions.map((q, index) => (
-          <div
-            key={index}
-            style={{ position: "relative", marginRight: "10px" }}
-          >
+          <div key={index} style={{ position: "relative" }}>
             <button
               onClick={() => setCurrentQuestionIndex(index)}
               className="question-index"

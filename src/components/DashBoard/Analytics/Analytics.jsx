@@ -80,9 +80,17 @@ const Analytics = () => {
     }
   };
 
-  const handleShare = (quizId) => {
+  const handleShare = (quizId, quizType) => {
+    console.log("quizType", quizType);
+
     const baseUrl = window.location.origin;
-    const shareUrl = `${baseUrl}/quiz/${quizId}/questions/view`;
+    var shareUrl;
+
+    if (quizType === "poll") {
+      shareUrl = `${baseUrl}/quiz/${quizId}/questions/poll`;
+    } else {
+      shareUrl = `${baseUrl}/quiz/${quizId}/questions/view`;
+    }
 
     navigator.clipboard.writeText(shareUrl).then(
       () => {
@@ -137,7 +145,7 @@ const Analytics = () => {
                   ></span>
                   <span
                     className="icon share"
-                    onClick={() => handleShare(quiz._id)}
+                    onClick={() => handleShare(quiz._id, quiz.type)}
                     title="Share"
                   ></span>
                   <a

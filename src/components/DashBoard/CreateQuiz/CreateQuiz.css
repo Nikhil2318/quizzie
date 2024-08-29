@@ -51,3 +51,8 @@
   background-color: #60b84b;
   color: #fff;
 }
+
+.quiz-continue:disabled {
+  background-color: #ccc; /* Example color */
+  cursor: not-allowed;
+}

@@ -108,7 +108,7 @@ function GetQuestions() {
       {!quizCompleted ? (
         <>
           <h1 className="quiz-title">Quiz Questions</h1>
-          <span className="question-index">
+          <span className="questions-index">
             {currentQuestionIndex}/{questions.length - 1}
           </span>
           {currentQuestion ? (
