@@ -76,7 +76,6 @@ tbody tr:last-of-type {
   margin-right: 8px;
   cursor: pointer;
 }
-
 .icon.edit {
   background-image: url("/images/edit.png"); /* Updated path */
   background-size: contain;
@@ -99,6 +98,7 @@ tbody tr:last-of-type {
   color: #377dff;
   font-weight: 600;
   text-decoration: none;
+  margin-left: 30px;
 }
 
 .analysis-link:hover {

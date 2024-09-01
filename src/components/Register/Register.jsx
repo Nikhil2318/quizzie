@@ -73,7 +73,7 @@ function Register() {
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
-            id="email"
+            id="email"  
             type="email"
             name="email"
             value={email}

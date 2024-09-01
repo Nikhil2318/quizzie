@@ -42,14 +42,23 @@ export const getPollQuestions = (quizId) => {
   }
 };
 
-// export const icrementVote = (questionId, optionId) => {
-//   try {
-//     const response = axios.put(
-//       `${BACKEND_URL}/api/quiz/pollQuestion/${questionId}/options/${optionId}`
-//     );
-//     return response;
-//   } catch (error) {
-//     console.error("Error incrementing vote:", error);
-//     throw error;
-//   }
-// };
+export const updatedQuestion = ({ quizId, questions }) => {
+  console.log("questions", questions);
+
+  try {
+    const response = axios.post(
+      `${BACKEND_URL}/api/quiz/questions/${quizId}/updatePollQuestions`,
+      { questions },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    return response;
+  } catch (e) {
+    console.error("Error details:", e.response ? e.response.data : e.message);
+    throw new Error(e.response ? e.response.data.message : e.message);
+  }
+};

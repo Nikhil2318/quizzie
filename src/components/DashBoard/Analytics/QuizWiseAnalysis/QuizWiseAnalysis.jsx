@@ -15,7 +15,6 @@ function QuizWiseAnalysis() {
     const fetchQuiz = async () => {
       try {
         const data = await getQuizByid(id);
-        console.log("quiz", data); // Log quiz data for debugging
         setQuiz(data);
         setLoading(false);
       } catch (error) {
@@ -67,17 +66,17 @@ function QuizWiseAnalysis() {
               </p>
               <div className="question-analysis">
                 <div className="analysis-container">
-                  {question.correctCount + question.incorrectCount}
-                  <span>Total</span>
+                  <span>{question.correctCount + question.incorrectCount}</span>
+                  <span>people Attempted the question</span>
                 </div>
                 <div className="analysis-container">
-                  {question.correctCount}
-                  <span>Correct</span>
+                  <span>{question.correctCount}</span>
+                  <span>people Answered Correctly</span>
                 </div>
                 <div className="analysis-container">
                   {" "}
-                  {question.incorrectCount}
-                  <span>Incorrect</span>
+                  <span>{question.incorrectCount}</span>
+                  <span>people Answered Incorrectly</span>
                 </div>
               </div>
               <div className="horizontal-line"></div>

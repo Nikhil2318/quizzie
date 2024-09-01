@@ -6,11 +6,19 @@ const DeleteModal = ({ isOpen, onClose, onDelete }) => {
 
   return (
     <div className="quiz-overlay">
-      <div className="quiz-content">
-        <h2>Confirm Deletion</h2>
-        <p>Are you sure you want to delete this quiz?</p>
-        <button onClick={onDelete}>Delete</button>
-        <button onClick={onClose}>Cancel</button>
+      <div className="delete-content">
+        <p className="delete-msg">
+          Are you Confirm you <br />
+          want to delete this ?
+        </p>
+        <div className="delete-buttons">
+          <button className="delete-button" onClick={onDelete}>
+            Confirm Delete
+          </button>
+          <button className="cancel-button" onClick={onClose}>
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );

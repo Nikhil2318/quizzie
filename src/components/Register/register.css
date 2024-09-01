@@ -64,15 +64,14 @@
   transition: background-color 0.3s ease;
 }
 
-.error {
+.register-form input.error {
   border: 2px solid red;
-  /* color: red; */
 }
 
-.error::placeholder {
+.register-form input.error::placeholder {
   color: red;
 }
 
 .form-group input.error {
-  background-color: #ffe6e6;
+  background: none;
 }

@@ -13,7 +13,6 @@ function CreateQuiz() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [type, setType] = useState("q&a");
   const navigate = useNavigate();
-
   const handleInput = (e) => {
     setQuizName(e.target.value);
   };
@@ -27,6 +26,7 @@ function CreateQuiz() {
   };
 
   const closeModal = () => {
+    navigate("/dashboard");
     setIsModalOpen(false);
   };
 
@@ -40,7 +40,6 @@ function CreateQuiz() {
 
     try {
       const response = await createQuiz({ title: quizName, type });
-      console.log("API response: ", response.data._id);
 
       if (response.status === 201) {
         toast.success("Quiz created");

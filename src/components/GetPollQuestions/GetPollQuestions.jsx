@@ -18,7 +18,6 @@ function GetPollQuestions() {
       try {
         const response = await getPollQuestions(quizId);
         setQuestions(response.data);
-        console.log("fetch poll questions", response.data);
       } catch (error) {
         toast.error("Error fetching poll questions");
         console.error("Error fetching poll questions:", error);
@@ -36,14 +35,11 @@ function GetPollQuestions() {
     selectedOption.votes += 1;
     setQuestions(updatedQuestions);
 
-    // Log the updated questions array and the selected option
-    console.log("Updated Questions Array:", updatedQuestions);
-    console.log("Clicked Option:", selectedOption);
+   
 
     // Optionally, if you need to track the selected option by its _id:
     setSelectedOption(selectedOption._id);
-    console.log("selectedOption id:", selectedOption._id);
-    console.log("questionId", questions[questionIndex].id);
+    
 
     try {
       await axios.patch(

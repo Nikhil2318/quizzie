@@ -8,6 +8,7 @@
   font-size: 3em;
   margin: 50px 30px;
   font-weight: 600;
+  color: #5076ff;
 }
 
 .quiz-details {
@@ -32,7 +33,7 @@
 .question-analysis {
   display: flex;
   gap: 10px;
-  margin-right: 200px;
+  margin-right: 100px;
 }
 
 .analysis-container {
@@ -40,12 +41,15 @@
   flex-direction: column;
   color: #474444;
   gap: 10px;
-  width: 15rem;
+  width: 21rem;
   margin: 20px;
   height: 8rem;
   border: none;
   background-color: #ffffff;
   font-size: 1.2em;
+}
+.analysis-container span {
+  font-weight: 600;
 }
 .horizontal-line {
   margin-top: 15px;

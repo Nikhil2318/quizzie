@@ -17,11 +17,13 @@ function TrendingQuizzes() {
     const getQuizzes = async () => {
       try {
         const data = await getQuiz();
-        console.log(data);
-        setQuizzes(data);
+
+        // Filter quizzes with more than 10 impressions
+        const filteredQuizzes = data.filter((quiz) => quiz.impressions > 10);
+        setQuizzes(filteredQuizzes);
 
         // Calculate total impressions
-        const total = data.reduce(
+        const total = filteredQuizzes.reduce(
           (sum, quiz) => sum + (quiz.impressions || 0),
           0
         );
@@ -88,6 +90,13 @@ function TrendingQuizzes() {
     return `${date.getDate()} ${month.substring(0, 3)}, ${date.getFullYear()}`;
   };
 
+  const formatImpressions = (impressions) => {
+    if (impressions >= 1000) {
+      return `${(impressions / 1000).toFixed(1)}k`;
+    }
+    return impressions;
+  };
+
   return (
     <>
       <div className="dashboard-top">
@@ -101,7 +110,8 @@ function TrendingQuizzes() {
           <h6>Created</h6>
         </div>
         <div className="top-content im">
-          {totalImpressions} <span>Total</span>
+          {formatImpressions(totalImpressions)}
+          <span>Total</span>
           <h6>Impressions</h6>
         </div>
       </div>
@@ -114,7 +124,9 @@ function TrendingQuizzes() {
             {quizzes.map((quiz) => (
               <div key={quiz._id} className="quiz">
                 <h2>{quiz.title}</h2>
-                <span className="impressions">{quiz.impressions}</span>
+                <span className="impressions">
+                  {formatImpressions(quiz.impressions)}
+                </span>
                 <img src="./images/eyes.png" alt="impressions" />
                 <p>Created on: {formatDate(quiz.date)}</p>
               </div>

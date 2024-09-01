@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getQuizByid } from "../../../../api/quiz";
 import { getPollQuestions } from "../../../../api/pollQuestion";
+import "./PollWiseAnalysis.css";
 
 function PollWiseAnalysis() {
   const { id } = useParams();
@@ -30,7 +31,6 @@ function PollWiseAnalysis() {
     const fetchQuestions = async () => {
       try {
         const response = await getPollQuestions(id);
-        console.log("questions", response.data);
         setQuestions(response.data);
       } catch (error) {
         console.error("Error fetching questions:", error);
@@ -64,12 +64,23 @@ function PollWiseAnalysis() {
               <p className="quiz-question">
                 Q.{index + 1} {question.question}
               </p>
-              {question.options.map((option) => (
-                <div key={option._id} className="option-item">
-                  <p>{option.text}</p>
-                  <p>Votes: {option.votes}</p>
-                </div>
-              ))}
+              <div className="poll-container">
+                {question.options.map((option) => (
+                  <div key={option._id} className="analysis-container">
+                    <div className="poll-options">
+                      <p className="poll-vote">{option.votes}</p>
+                      {option.imageURL && (
+                        <img
+                          src={option.imageURL}
+                          alt={option.text}
+                          className="option-image"
+                        />
+                      )}
+                      <p>{option.text}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
               <div className="horizontal-line"></div>
             </div>
           ))}
@@ -83,3 +94,4 @@ function PollWiseAnalysis() {
 }
 
 export default PollWiseAnalysis;
+ 

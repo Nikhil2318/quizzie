@@ -1,7 +1,11 @@
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { createPollQuestions } from "../../../../api/pollQuestion";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  createPollQuestions,
+  getPollQuestions,
+} from "../../../../api/pollQuestion";
 import toast from "react-hot-toast";
+import { getQuestions, updatedQuestion } from "../../../../api/question";
 
 function PollQuestions() {
   const [questions, setQuestions] = useState([
@@ -15,6 +19,27 @@ function PollQuestions() {
       optionType: "text", // Adding this to manage the option type
     },
   ]);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const response = await getPollQuestions(quizId);
+
+        if (response.data && response.data.length > 0) {
+          // Assuming response.data is the array of questions
+          setQuestions(response.data);
+          setCurrentQuestionIndex(0); // Start from the first question
+        } else {
+          console.error("No questions found for this quiz");
+        }
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+      }
+    };
+
+    fetchQuestions();
+  }, [quizId]);
+
   const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
@@ -32,6 +57,30 @@ function PollQuestions() {
       },
     ]);
     setCurrentQuestionIndex(questions.length);
+  };
+  const updateQuestions = async () => {
+    try {
+      // Ensure that each question object has a valid _id
+      const validQuestions = questions.map(({ _id, question, options }) => ({
+        _id, // Ensure _id is set correctly
+        question, // Only send fields that need updating
+        options,
+      }));
+
+      const response = await updatedQuestion({
+        quizId,
+        questions: validQuestions,
+      });
+
+      if (response.status === 200) {
+        toast.success("Questions updated successfully");
+      } else {
+        throw new Error("Failed to update questions");
+      }
+    } catch (error) {
+      toast.error("Failed to update questions");
+      console.error("Update error:", error);
+    }
   };
 
   const handleOptionTypeChange = (index, value) => {
@@ -69,40 +118,47 @@ function PollQuestions() {
     }
   };
 
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
   const params = useParams();
+  const action = queryParams.get("action");
+  // Extract the quizId from the path
+  var quizId;
 
-  const fullPath = params["*"];
-  const quizId = fullPath.split("/").pop();
+  // Determine if it's create mode or update mode
+  if (location.search) {
+    // Update mode: quizId comes from the query string
+    quizId = queryParams.get("quizId");
+  } else {
+    // Create mode: quizId comes from the URL path
+    const fullPath = params["*"];
+    quizId = fullPath.split("/").pop();
+  }
 
   const handleSubmit = async (e) => {
-    for (const question of questions) {
-      console.log("question id", quizId);
-      console.log("question", question.question);
-      console.log("question options", question.options);
-      console.log("question optionType", question.optionType);
-    }
-
     e.preventDefault();
+    if (action === "update") {
+      await updateQuestions();
+    } else {
+      try {
+        for (const question of questions) {
+          const response = await createPollQuestions({
+            quizId,
+            question: question.question,
+            optionType: question.optionType,
+            options: question.options,
+          });
 
-    try {
-      for (const question of questions) {
-        const response = await createPollQuestions({
-          quizId,
-          question: question.question,
-          optionType: question.optionType,
-          options: question.options,
-        });
-        console.log("poll question", response);
-
-        if (response.status !== 201) {
-          throw new Error(`Failed to add question: ${question.question}`);
+          if (response.status !== 201) {
+            throw new Error(`Failed to add question: ${question.question}`);
+          }
         }
+        toast.success("Questions added successfully");
+        navigate(`/quiz/${quizId}/questions/poll`);
+      } catch (error) {
+        toast.error("Failed to add questions");
+        console.error("Submission error:", error);
       }
-      toast.success("Questions added successfully");
-      navigate(`/quiz/${quizId}/questions/poll`);
-    } catch (error) {
-      toast.error("Failed to add questions");
-      console.error("Submission error:", error);
     }
   };
 
@@ -335,7 +391,7 @@ function PollQuestions() {
                 <br />
 
                 <button className="submit-btn" type="submit">
-                  Create Quiz
+                  {action === "update" ? "update Quiz" : "Create Quiz"}
                 </button>
               </div>
             )

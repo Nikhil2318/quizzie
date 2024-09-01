@@ -10,6 +10,7 @@ import { getQuiz } from "../../api/quiz";
 import TrendingQuizes from "./TrendingQuizes/TrendingQuizes";
 import { verifyToken } from "../../api/auth";
 import QuizWiseAnalysis from "./Analytics/QuizWiseAnalysis/QuizWiseAnalysis";
+import PollWiseAnalysis from "./Analytics/PollWiseAnalysis/PollWiseAnalysis";
 
 function DashBoard() {
   const navigate = useNavigate();
@@ -48,12 +49,6 @@ function DashBoard() {
       try {
         const response = await verifyToken();
         // console.log("dashBoard", response);
-
-        if (response.status === 200) {
-          toast.success("User verified successfully");
-        } else {
-          toast.error("User verification failed");
-        }
       } catch (error) {
         toast.error("Error verifying user");
       }
@@ -82,7 +77,9 @@ function DashBoard() {
         <Routes>
           <Route path="/" element={<TrendingQuizes />} />
           <Route path="analytics" element={<Analytics />} />
-          <Route path="analytics/:id" element={<QuizWiseAnalysis />} />
+          <Route path="analytics/:quizId" element={<Analytics />} />
+          <Route path="analytics/quiz/:id" element={<QuizWiseAnalysis />} />
+          <Route path="analytics/poll/:id" element={<PollWiseAnalysis />} />
         </Routes>
       </div>
       <Quiz isOpen={isModalOpen} onClose={closeModal}>

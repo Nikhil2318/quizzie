@@ -19,6 +19,10 @@ styles.css .quiz-container {
   text-align: center;
   color: #444;
 }
+.option-content {
+  display: flex;
+  gap: 10px;
+}
 .options {
   margin-top: 20px;
   list-style: none;

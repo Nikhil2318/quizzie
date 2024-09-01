@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./QuizQuestions.css";
-import { useNavigate, useParams } from "react-router-dom";
-import { createQuestions } from "../../../../api/question";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import {
+  createQuestions,
+  getQuestions,
+  updatedQuestion,
+} from "../../../../api/question";
 import toast from "react-hot-toast";
+import ShareModal from "../ShareModal/ShareModal"; // Import the ShareModal component
 
 function QuizQuestions() {
   const [questions, setQuestions] = useState([
@@ -20,6 +25,74 @@ function QuizQuestions() {
   ]);
   const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [showShareModal, setShowShareModal] = useState(false); // State to manage ShareModal visibility
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const params = useParams();
+  const action = queryParams.get("action");
+  // Extract the quizId from the path
+  var quizId;
+
+  // Determine if it's create mode or update mode
+  if (location.search) {
+    // Update mode: quizId comes from the query string
+    quizId = queryParams.get("quizId");
+  } else {
+    // Create mode: quizId comes from the URL path
+    const fullPath = params["*"];
+    quizId = fullPath.split("/").pop();
+  }
+
+  // Fetch existing questions if any
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const response = await getQuestions(quizId);
+        console.log("response", response.data);
+
+        if (response.data && response.data.length > 0) {
+          // Assuming response.data is the array of questions
+          setQuestions(response.data);
+          setCurrentQuestionIndex(0); // Start from the first question
+        } else {
+          console.error("No questions found for this quiz");
+        }
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+      }
+    };
+
+    fetchQuestions();
+  }, [quizId]);
+
+  const updateQuestions = async () => {
+    try {
+      // Ensure that each question object has a valid _id
+      const validQuestions = questions.map(
+        ({ _id, question, options, timer }) => ({
+          _id, // Ensure _id is set correctly
+          question, // Only send fields that need updating
+          options,
+          timer,
+        })
+      );
+
+      const response = await updatedQuestion({
+        quizId,
+        questions: validQuestions,
+      });
+
+      if (response.status === 200) {
+        toast.success("Questions updated successfully");
+      } else {
+        throw new Error("Failed to update questions");
+      }
+    } catch (error) {
+      toast.error("Failed to update questions");
+      console.error("Update error:", error);
+    }
+  };
 
   const handleOptionTypeChange = (index, value) => {
     const updatedQuestions = [...questions];
@@ -77,36 +150,38 @@ function QuizQuestions() {
     }
   };
 
-  const params = useParams();
-
-  // Extract the quizId from the path
-  const fullPath = params["*"];
-  const quizId = fullPath.split("/").pop();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Iterate through each question and send it individually
     try {
-      for (const question of questions) {
-        const response = await createQuestions({
-          quizId,
-          question: question.question,
-          optionType: question.optionType,
-          options: question.options,
-          correctOption: question.answer,
-          timer: question.timer,
-        });
+      // Update existing questions
+      if (action === "update") {
+        // console.log("updated...");
 
-        if (response.status !== 201) {
-          throw new Error(`Failed to add question: ${question.question}`);
+        await updateQuestions(); // Use the updateQuestions function
+      } else {
+        // Create new questions
+        for (const question of questions) {
+          const response = await createQuestions({
+            quizId, // This will be undefined for new quizzes
+            question: question.question,
+            optionType: question.optionType,
+            options: question.options,
+            correctOption: question.answer,
+            timer: question.timer,
+          });
+
+          if (response.status !== 201) {
+            throw new Error(`Failed to add question: ${question.question}`);
+          }
+
+          toast.success("Questions added successfully");
         }
       }
 
-      toast.success("Questions added successfully");
-      navigate(`/quiz/${quizId}/questions/view`);
+      setShowShareModal(true); // Show the ShareModal after successful operation
     } catch (error) {
-      toast.error("Failed to add questions");
+      toast.error("Failed to add or update questions");
       console.error("Submission error:", error);
     }
   };
@@ -157,7 +232,6 @@ function QuizQuestions() {
                 }}
               />
               <br />
-
               <label className="option-type sta">Option type:</label>
               <input
                 className="option-radio"
@@ -173,7 +247,6 @@ function QuizQuestions() {
               <label htmlFor={`text-${questionIndex}`} className="text-option">
                 Text
               </label>
-
               <input
                 className="option-radio"
                 type="radio"
@@ -191,7 +264,6 @@ function QuizQuestions() {
               >
                 Image URL
               </label>
-
               <input
                 className="option-radio"
                 type="radio"
@@ -210,7 +282,6 @@ function QuizQuestions() {
                 Text & Image URL
               </label>
               <br />
-
               {question.options.map((option, optionIndex) => (
                 <div key={optionIndex}>
                   {question.optionType === "text" && (
@@ -417,14 +488,19 @@ function QuizQuestions() {
                 </button>
               </div>
               <br />
-
               <button className="submit-btn" type="submit">
-                Create Quiz
+                {action === "update" ? "update Quiz" : "Create Quiz"}
               </button>
             </div>
           ) : null
         )}
       </form>
+
+      {/* Render ShareModal if showShareModal is true */}
+      {/* Render ShareModal if showShareModal is true and action is not "update" */}
+      {showShareModal && action !== "update" && (
+        <ShareModal onClose={() => setShowShareModal(false)} />
+      )}
     </>
   );
 }

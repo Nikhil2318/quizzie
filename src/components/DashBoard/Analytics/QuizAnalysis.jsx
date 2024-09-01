@@ -14,7 +14,6 @@ const QuizAnalysis = () => {
     const fetchQuiz = async () => {
       try {
         const data = await getQuizByid(selectedQuizId);
-        console.log("Fetched Quiz Data:", data); // Log data to ensure quiz type is correct
         setQuiz(data);
         setLoading(false);
       } catch (error) {
@@ -30,7 +29,6 @@ const QuizAnalysis = () => {
   if (error) return <div>Error: {error.message}</div>;
 
   // Log quiz type to ensure it is being handled correctly
-  console.log("Quiz Type:", quiz.type);
 
   return (
     <div>

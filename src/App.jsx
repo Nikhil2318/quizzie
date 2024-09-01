@@ -6,10 +6,8 @@ import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
 import DashBoard from "./components/DashBoard/DashBoard";
 import GetQuestions from "./components/GetQuestions/GetQuestions";
-import QuizWiseAnalysis from "./components/DashBoard/Analytics/QuizWiseAnalysis/QuizWiseAnalysis";
 import GetPollQuestions from "./components/GetPollQuestions/GetPollQuestions";
-import PollWiseAnalysis from "./components/DashBoard/Analytics/PollWiseAnalysis/PollWiseAnalysis";
-import QuizAnalysis from "./components/DashBoard/Analytics/QuizAnalysis";
+import ShareModal from "./components/DashBoard/CreateQuiz/QuizModal/QuizModal";
 
 function App() {
   return (
@@ -34,20 +32,7 @@ function App() {
           path="/quiz/:quizId/questions/poll"
           element={<GetPollQuestions />}
         />
-        {/* <Route
-          path="/dashboard/analysis/:selectedQuizId"
-          element={<QuizWiseAnalysis />}
-        />
-        <Route
-          path="/dashboard/analysis/:selectedQuizId"
-          element={<PollWiseAnalysis />}
-        /> */}
-        <Route
-          path="/dashboard/analysis/:selectedQuizId"
-          element={<QuizAnalysis />}
-        />
-        {/* <Route path="/dashboard/analytics" element={<Analytics />} />
-        <Route path="/dashboard/createQuiz" element={<CreateQuiz />} /> */}
+        <Route path="/quiz/:quizId/share" element={<ShareModal />} />
       </Routes>
     </>
   );

@@ -73,3 +73,24 @@ export const evaluationCount = (id, isCorrect) => {
     throw new Error(e.response ? e.response.data.message : e.message);
   }
 };
+
+export const updatedQuestion = ({ quizId, questions }) => {
+  console.log("questions", questions);
+
+  try {
+    const response = axios.post(
+      `${BACKEND_URL}/api/quiz/questions/${quizId}/updateQuestions`,
+      { questions },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    return response;
+  } catch (e) {
+    console.error("Error details:", e.response ? e.response.data : e.message);
+    throw new Error(e.response ? e.response.data.message : e.message);
+  }
+};

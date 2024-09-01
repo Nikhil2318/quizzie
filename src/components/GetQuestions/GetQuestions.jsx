@@ -4,6 +4,7 @@ import { getQuestions, evaluationCount } from "../../api/question";
 import toast from "react-hot-toast";
 import "./GetQuestions.css";
 import axios from "axios";
+import { BACKEND_URL } from "../../utils/constant";
 
 function GetQuestions() {
   const [questions, setQuestions] = useState([]);
@@ -15,9 +16,13 @@ function GetQuestions() {
   const [quizCompleted, setQuizCompleted] = useState(false);
 
   useEffect(() => {
+    console.log("quizId from GetQues", quizId);
     const incrementImpressions = async () => {
       try {
-        await axios.post(`/api/increment-impressions/${quizId}`);
+        const response = await axios.post(
+          `${BACKEND_URL}/api/quiz/increment-impressions/${quizId}`
+        );
+        console.log("Impressions incremented:", response.data);
       } catch (error) {
         console.error("Failed to increment impressions:", error);
       }
@@ -40,7 +45,8 @@ function GetQuestions() {
 
   useEffect(() => {
     if (questions.length > 0 && currentQuestionIndex === 0) {
-      setTimeLeft(parseInt(questions[0].timer, 10) || 0);
+      const timerValue = parseInt(questions[0].timer, 10);
+      setTimeLeft(isNaN(timerValue) ? null : timerValue);
     }
   }, [questions]);
 
@@ -59,6 +65,8 @@ function GetQuestions() {
   };
 
   const updateCount = async (questionId, isCorrect) => {
+    console.log("isCorrect", isCorrect);
+
     try {
       const response = await evaluationCount(questionId, isCorrect);
       console.log("Updated count:", response.data);
@@ -75,11 +83,17 @@ function GetQuestions() {
 
     if (!isTimerEnd && !selectedOption) return;
 
+    // Split the correctOption into text and imageURL
+    const [correctText, correctImageURL] =
+      currentQuestion.correctOption.split(" ");
+
+    // Evaluate whether the selected option is correct
     const isCorrect =
-      (selectedOption?.text &&
-        selectedOption.text === currentQuestion.correctOption) ||
-      (selectedOption?.imageURL &&
-        selectedOption.imageURL === currentQuestion.correctOption);
+      (selectedOption?.text === correctText || !correctText) &&
+      (selectedOption?.imageURL === correctImageURL || !correctImageURL);
+
+    console.log(" correctText", correctText);
+    console.log(" selectedOption.text", selectedOption.text);
 
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
@@ -90,7 +104,8 @@ function GetQuestions() {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption(null);
-      setTimeLeft(parseInt(questions[currentQuestionIndex + 1].timer, 10) || 0);
+      const nextTimer = questions[currentQuestionIndex + 1].timer;
+      setTimeLeft(nextTimer === "off" ? null : parseInt(nextTimer, 10) || 0);
     } else {
       const finalScore = isCorrect ? score + 1 : score;
       setQuizCompleted(true);
@@ -113,7 +128,9 @@ function GetQuestions() {
           </span>
           {currentQuestion ? (
             <div>
-              <h4 className="timer">Timer: {timeLeft}</h4>
+              {timeLeft !== null && timeLeft >= 0 && (
+                <h4 className="timer">Timer: {timeLeft}</h4>
+              )}
               <h2 className="question">{currentQuestion.question}</h2>
               <ul className="options">
                 {currentQuestion.options.map((option, index) => (
