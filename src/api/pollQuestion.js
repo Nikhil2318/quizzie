@@ -42,12 +42,12 @@ export const getPollQuestions = (quizId) => {
   }
 };
 
-export const updatedQuestion = ({ quizId, questions }) => {
+export const updatedPollQuestion = ({ quizId, questions }) => {
   console.log("questions", questions);
 
   try {
     const response = axios.post(
-      `${BACKEND_URL}/api/quiz/questions/${quizId}/updatePollQuestions`,
+      `${BACKEND_URL}/api/quiz/pollQuestion/${quizId}/updatePollQuestions`,
       { questions },
       {
         headers: {

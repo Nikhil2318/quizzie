@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   createPollQuestions,
   getPollQuestions,
+  updatedPollQuestion,
 } from "../../../../api/pollQuestion";
 import toast from "react-hot-toast";
 import { getQuestions, updatedQuestion } from "../../../../api/question";
@@ -66,8 +67,9 @@ function PollQuestions() {
         question, // Only send fields that need updating
         options,
       }));
+      console.log("valid Questions", validQuestions);
 
-      const response = await updatedQuestion({
+      const response = await updatedPollQuestion({
         quizId,
         questions: validQuestions,
       });
@@ -137,7 +139,9 @@ function PollQuestions() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (action === "update") {
+      console.log("update...");
       await updateQuestions();
     } else {
       try {

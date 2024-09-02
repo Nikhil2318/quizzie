@@ -83,18 +83,25 @@ function GetQuestions() {
 
     if (!isTimerEnd && !selectedOption) return;
 
-    // Split the correctOption into text and imageURL
-    const [correctText, correctImageURL] =
-      currentQuestion.correctOption.split(" ");
+    // Determine the correct answer
+    const correctOption = currentQuestion.correctOption;
+
+    // Debugging logs
+    console.log("Correct Option:", correctOption);
+    console.log("Selected Option Text:", selectedOption?.text);
 
     // Evaluate whether the selected option is correct
     const isCorrect =
-      (selectedOption?.text === correctText || !correctText) &&
-      (selectedOption?.imageURL === correctImageURL || !correctImageURL);
+      (String(selectedOption?.text).trim().toLowerCase() ===
+        String(correctOption).trim().toLowerCase() ||
+        correctOption === null) &&
+      (selectedOption?.imageURL === currentQuestion.correctImageURL ||
+        currentQuestion.correctImageURL === null);
 
-    console.log(" correctText", correctText);
-    console.log(" selectedOption.text", selectedOption.text);
-
+    console.log("Is Correct:", isCorrect);
+    if (selectedOption?.text === correctOption) {
+      setScore((prevScore) => prevScore + 1);
+    }
     if (isCorrect) {
       setScore((prevScore) => prevScore + 1);
     }
@@ -124,7 +131,7 @@ function GetQuestions() {
         <>
           <h1 className="quiz-title">Quiz Questions</h1>
           <span className="questions-index">
-            {currentQuestionIndex}/{questions.length - 1}
+            {currentQuestionIndex}/{questions.length}
           </span>
           {currentQuestion ? (
             <div>

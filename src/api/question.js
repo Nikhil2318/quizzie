@@ -86,6 +86,7 @@ export const updatedQuestion = ({ quizId, questions }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
+        params: { id: quizId },
       }
     );
     return response;

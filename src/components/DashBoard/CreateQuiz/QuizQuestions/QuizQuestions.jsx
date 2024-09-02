@@ -86,10 +86,24 @@ function QuizQuestions() {
       if (response.status === 200) {
         toast.success("Questions updated successfully");
       } else {
-        throw new Error("Failed to update questions");
+        // Handle unexpected status codes
+        toast.error("Failed to update questions");
       }
     } catch (error) {
-      toast.error("Failed to update questions");
+      if (error.response) {
+        // Server responded with a status code other than 2xx
+        if (error.response.status === 403) {
+          toast.error("You are not authorized to perform this action.");
+        } else {
+          toast.error("Failed to update questions");
+        }
+      } else if (error.request) {
+        // Request was made but no response received
+        toast.error("No response received from the server.");
+      } else {
+        // Something else went wrong
+        toast.error("An unexpected error occurred.");
+      }
       console.error("Update error:", error);
     }
   };

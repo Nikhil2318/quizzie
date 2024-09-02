@@ -35,11 +35,8 @@ function GetPollQuestions() {
     selectedOption.votes += 1;
     setQuestions(updatedQuestions);
 
-   
-
     // Optionally, if you need to track the selected option by its _id:
     setSelectedOption(selectedOption._id);
-    
 
     try {
       await axios.patch(
@@ -70,7 +67,7 @@ function GetPollQuestions() {
       {!quizCompleted ? (
         <>
           <span className="questions-index">
-            {currentQuestionIndex}/{questions.length - 1}
+            {currentQuestionIndex}/{questions.length}
           </span>
           {currentQuestion && (
             <div>
