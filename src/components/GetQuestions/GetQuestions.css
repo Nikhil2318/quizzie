@@ -1,9 +1,14 @@
 styles.css .quiz-container {
   /* max-width: 600px; */
+  min-height: 100vh;
   margin: 0 auto;
   padding: 20px;
   background-color: #f7f7f7;
   border-radius: 8px;
+  display: flex; /* Add Flexbox */
+  flex-direction: column; /* Arrange content vertically */
+  justify-content: center; /* Center content vertically */
+  align-items: center;
   /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
 
@@ -78,11 +83,10 @@ styles.css .quiz-container {
 
 .next-button {
   /* display: block; */
-  margin: 2rem 0;
+  margin: 2rem 42rem;
   width: 6rem;
-  place-items: center;
   padding: 10px;
-  background-color: #007bff;
+  background-color: #28a745;
   color: #fff;
   font-size: 16px;
   border: none;
@@ -93,10 +97,6 @@ styles.css .quiz-container {
 
 .next-button:disabled {
   background-color: #ccc;
-}
-
-.next-button:not(:disabled):hover {
-  background-color: #0056b3;
 }
 
 .option-image {
@@ -159,6 +159,7 @@ styles.css .quiz-container {
   .next-button {
     width: 100%; /* Make the next button full width */
     font-size: 14px; /* Slightly smaller font size */
+    margin-left: 0;
   }
 
   .congratulations-container img {

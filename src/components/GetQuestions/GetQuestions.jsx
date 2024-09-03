@@ -116,9 +116,6 @@ function GetQuestions() {
     } else {
       const finalScore = isCorrect ? score + 1 : score;
       setQuizCompleted(true);
-      toast(
-        `Quiz completed! Your score: ${finalScore} out of ${questions.length}`
-      );
       console.log("Final score:", finalScore);
     }
   };
